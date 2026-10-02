@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS loan_applications (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    application_ref VARCHAR(50) NOT NULL UNIQUE,
+    applicant_id BIGINT NOT NULL,
+    product_type VARCHAR(30) NOT NULL,
+    requested_amount DECIMAL(15, 2) NOT NULL,
+    tenure_months INT NOT NULL,
+    purpose TEXT NOT NULL,
+    status VARCHAR(30) NOT NULL,
+    assigned_officer_id BIGINT,
+    credit_score INT,
+    scorecard_score INT,
+    decision_date TIMESTAMP,
+    decided_by BIGINT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_app_applicant FOREIGN KEY (applicant_id) REFERENCES applicants(id),
+    CONSTRAINT fk_app_officer FOREIGN KEY (assigned_officer_id) REFERENCES users(id),
+    CONSTRAINT fk_app_decided_by FOREIGN KEY (decided_by) REFERENCES users(id)
+);

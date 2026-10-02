@@ -1,0 +1,42 @@
+# =========================
+# React / Vite
+# =========================
+locas-frontend/node_modules/
+locas-frontend/dist/
+
+# =========================
+# Spring Boot / Maven
+# =========================
+locas-backend/target/
+
+# =========================
+# Environment files
+# =========================
+.env
+.env.*
+locas-frontend/.env
+locas-frontend/.env.*
+locas-backend/.env
+locas-backend/.env.*
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# Java
+# =========================
+*.class
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db

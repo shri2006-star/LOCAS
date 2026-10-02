@@ -1,0 +1,11 @@
+#!/bin/sh
+DIR="$(cd "$(dirname "$0")" && pwd)"
+WPR_JAR="$DIR/.mvn/wrapper/maven-wrapper.jar"
+WPR_JAVA="$DIR/.mvn/wrapper/MavenWrapperDownloader.java"
+
+if [ ! -f "$WPR_JAR" ]; then
+    echo "Downloading Maven Wrapper JAR..."
+    java "$WPR_JAVA"
+fi
+
+exec java -Dmaven.multiModuleProjectDirectory="$DIR" -cp "$WPR_JAR" org.apache.maven.wrapper.MavenWrapperMain "$@"

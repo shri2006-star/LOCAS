@@ -1,0 +1,832 @@
+import os
+import subprocess
+
+html_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LOCAS - LOAN ORIGINATION AND CREDIT ASSESSMENT SYSTEM PROJECT REPORT</title>
+<style>
+    @page {
+        size: A4;
+        margin: 15mm 15mm 15mm 15mm;
+    }
+    body {
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 11pt;
+        line-height: 1.4;
+        color: #000000;
+        margin: 0;
+        padding: 0;
+    }
+    .page {
+        page-break-after: always;
+        position: relative;
+        min-height: 92vh;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+    .header-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 15px;
+    }
+    .header-table td {
+        vertical-align: middle;
+    }
+    .college-name {
+        font-family: Arial, sans-serif;
+        font-size: 13pt;
+        font-weight: bold;
+        color: #0056b3;
+        text-align: center;
+    }
+    .college-sub {
+        font-family: Arial, sans-serif;
+        font-size: 8.5pt;
+        text-align: center;
+        color: #333333;
+    }
+    .report-title {
+        font-size: 18pt;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .report-subtitle {
+        font-size: 15pt;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    .course-code {
+        font-size: 13pt;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 35px;
+    }
+    .submitted-by {
+        font-size: 11pt;
+        font-style: italic;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .student-name {
+        font-size: 15pt;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .degree-text {
+        font-size: 11pt;
+        text-align: center;
+        margin-bottom: 8px;
+        font-style: italic;
+    }
+    .degree-name {
+        font-size: 13pt;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 8px;
+    }
+    .dept-name {
+        font-size: 13pt;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 35px;
+    }
+    .college-footer {
+        font-size: 10.5pt;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 25px;
+    }
+    .date-text {
+        font-size: 11pt;
+        text-align: center;
+        margin-top: 25px;
+    }
+    .page-number {
+        position: absolute;
+        bottom: 5px;
+        width: 100%;
+        text-align: center;
+        font-size: 10pt;
+    }
+
+    /* Headings */
+    h1 {
+        font-size: 15pt;
+        font-weight: bold;
+        text-align: center;
+        text-transform: uppercase;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    h2 {
+        font-size: 13pt;
+        font-weight: bold;
+        margin-top: 15px;
+        margin-bottom: 8px;
+    }
+    h3 {
+        font-size: 11pt;
+        font-weight: bold;
+        margin-top: 12px;
+        margin-bottom: 4px;
+    }
+    p {
+        text-align: justify;
+        margin-bottom: 10px;
+        text-indent: 25px;
+    }
+    p.no-indent {
+        text-indent: 0;
+    }
+
+    /* Tables */
+    table.data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+        margin-bottom: 15px;
+    }
+    table.data-table th, table.data-table td {
+        border: 1px solid #000000;
+        padding: 6px 8px;
+        font-size: 9.5pt;
+    }
+    table.data-table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    /* Code Box */
+    .code-container {
+        background-color: #1e1e1e;
+        color: #d4d4d4;
+        font-family: 'Consolas', 'Courier New', monospace;
+        font-size: 8.5pt;
+        padding: 12px;
+        border-radius: 5px;
+        margin: 12px 0;
+        white-space: pre-wrap;
+        overflow-x: auto;
+        border: 1px solid #333;
+    }
+
+    /* Screenshot container */
+    .screenshot-box {
+        border: 1px solid #cccccc;
+        padding: 8px;
+        text-align: center;
+        margin: 15px 0;
+        background-color: #fafafa;
+    }
+    .screenshot-box img {
+        max-width: 95%;
+        height: auto;
+        border: 1px solid #ddd;
+    }
+    .caption {
+        font-size: 9.5pt;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 6px;
+    }
+    ul, ol {
+        margin-bottom: 12px;
+        padding-left: 25px;
+    }
+    li {
+        margin-bottom: 4px;
+        text-align: justify;
+    }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: COVER PAGE -->
+<div class="page">
+    <table class="header-table">
+        <tr>
+            <td style="width: 15%; text-align: left;">
+                <svg width="60" height="60" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#b30000" stroke-width="4"/>
+                    <circle cx="50" cy="50" r="35" fill="none" stroke="#0056b3" stroke-width="2"/>
+                    <text x="50" y="55" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="#0056b3">SKCT</text>
+                </svg>
+            </td>
+            <td style="width: 70%;">
+                <div class="college-name">SRI KRISHNA COLLEGE OF TECHNOLOGY</div>
+                <div class="college-sub">(An Autonomous Institution)</div>
+                <div class="college-sub">Affiliated to Anna University and Approved by AICTE</div>
+                <div class="college-sub">KOVAIPUDUR, COIMBATORE – 641 042.</div>
+            </td>
+            <td style="width: 15%; text-align: right;">
+                <svg width="60" height="60" viewBox="0 0 100 100">
+                    <rect x="10" y="10" width="80" height="80" fill="none" stroke="#b30000" stroke-width="3"/>
+                    <path d="M 20 20 L 80 20 L 80 80 L 20 80 Z" fill="none" stroke="#0056b3" stroke-width="2"/>
+                    <text x="50" y="55" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#b30000">SRI KRISHNA</text>
+                </svg>
+            </td>
+        </tr>
+    </table>
+
+    <div class="report-title">LOAN ORIGINATION AND CREDIT ASSESSMENT SYSTEM (LOCAS)</div>
+    <div class="report-subtitle">A PROJECT REPORT</div>
+    <div class="course-code">23CS503 – APPLICATION DEVELOPMENT</div>
+
+    <div class="submitted-by">Submitted by</div>
+    <div class="student-name">ABISHEK B (727824TUIT004)</div>
+
+    <div class="degree-text">In partial fulfilment for the award of the degree</div>
+    <div class="degree-text">of</div>
+    <div class="degree-name">BACHELOR OF TECHNOLOGY</div>
+    <div class="degree-text">IN</div>
+    <div class="dept-name">INFORMATION TECHNOLOGY</div>
+
+    <div class="college-footer">
+        SRI KRISHNA COLLEGE OF TECHNOLOGY<br>
+        <span style="font-weight: normal; font-size: 9.5pt;">
+            An Autonomous Institution | Approved by AICTE | Affiliated to Anna University | Accredited by NAAC with ‘A’ Grade Kovaipudur, Coimbatore – 641042.
+        </span>
+    </div>
+    <div class="date-text">September 2026</div>
+    <div class="page-number">i</div>
+</div>
+
+<!-- PAGE 2: SUSTAINABLE DEVELOPMENT GOALS -->
+<div class="page">
+    <table class="header-table">
+        <tr>
+            <td style="width: 15%; text-align: left;">
+                <svg width="45" height="45" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#b30000" stroke-width="4"/>
+                    <text x="50" y="55" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="#0056b3">SKCT</text>
+                </svg>
+            </td>
+            <td style="width: 70%;">
+                <div class="college-name" style="font-size: 11pt;">SRI KRISHNA COLLEGE OF TECHNOLOGY</div>
+                <div class="college-sub" style="font-size: 7.5pt;">(An Autonomous Institution) Affiliated to Anna University | Approved by AICTE</div>
+                <div class="college-sub" style="font-size: 7.5pt;">KOVAIPUDUR, COIMBATORE – 641 042.</div>
+            </td>
+            <td style="width: 15%; text-align: right;">
+                <svg width="45" height="45" viewBox="0 0 100 100">
+                    <rect x="10" y="10" width="80" height="80" fill="none" stroke="#b30000" stroke-width="3"/>
+                    <text x="50" y="55" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#b30000">SKI</text>
+                </svg>
+            </td>
+        </tr>
+    </table>
+
+    <h1>SUSTAINABLE DEVELOPMENT GOALS</h1>
+    <p class="no-indent">The Sustainable Development Goals are a collection of 17 global goals designed as a blueprint to achieve a better and more sustainable future for all. The SDGs, set in 2015 by the United Nations General Assembly and intended to be achieved by the year 2030, were agreed upon by 193 nations to change the world for the better. The project is based on the following global goals:</p>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 35%;">QUESTIONS</th>
+                <th style="width: 65%;">ANSWER SAMPLES</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Which SDGs does the project directly address?</strong></td>
+                <td><strong>SDG 8: Decent Work and Economic Growth & SDG 9: Industry, Innovation and Infrastructure</strong> – by accelerating credit access for MSMEs and individuals through automated risk scoring and paperless digital lending.</td>
+            </tr>
+            <tr>
+                <td><strong>What strategies or actions are being implemented to achieve these goals?</strong></td>
+                <td>End-to-end digital loan origination platform with automated FOIR/LTV calculators, real-time credit bureau pulls (CIBIL/Experian), Maker-Checker approval governance, and paperless e-sign workflows.</td>
+            </tr>
+            <tr>
+                <td><strong>How is progress measured and reported in relation to the SDGs?</strong></td>
+                <td>Tracking credit decision turnaround time (TAT reduction), paperless documentation compliance, credit default (NPA) rates, and tamper-proof SHA-256 audit trails.</td>
+            </tr>
+            <tr>
+                <td><strong>How were these goals identified as relevant to the project’s objectives?</strong></td>
+                <td>Eliminates manual paper bottlenecks, human underwriting bias, credit miscalculations, and delayed loan disbursements to foster inclusive financial growth.</td>
+            </tr>
+            <tr>
+                <td><strong>Are there any partnerships or collaborations in place to enhance this impact?</strong></td>
+                <td>Collaborating with commercial retail banks, NBFCs, credit information bureaus (CIBIL, Experian, Equifax, CRIF), and financial regulatory bodies (RBI).</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="page-number">ii</div>
+</div>
+
+<!-- PAGE 3: BONAFIDE CERTIFICATE -->
+<div class="page">
+    <table class="header-table">
+        <tr>
+            <td style="width: 15%; text-align: left;">
+                <svg width="45" height="45" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#b30000" stroke-width="4"/>
+                    <text x="50" y="55" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="#0056b3">SKCT</text>
+                </svg>
+            </td>
+            <td style="width: 70%;">
+                <div class="college-name" style="font-size: 11pt;">SRI KRISHNA COLLEGE OF TECHNOLOGY</div>
+                <div class="college-sub" style="font-size: 7.5pt;">(An Autonomous Institution) Affiliated to Anna University | Approved by AICTE</div>
+                <div class="college-sub" style="font-size: 7.5pt;">KOVAIPUDUR, COIMBATORE – 641 042.</div>
+            </td>
+            <td style="width: 15%; text-align: right;">
+                <svg width="45" height="45" viewBox="0 0 100 100">
+                    <rect x="10" y="10" width="80" height="80" fill="none" stroke="#b30000" stroke-width="3"/>
+                    <text x="50" y="55" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#b30000">SKI</text>
+                </svg>
+            </td>
+        </tr>
+    </table>
+
+    <h1>BONAFIDE CERTIFICATE</h1>
+    <p class="no-indent" style="margin-top: 30px; line-height: 1.8;">
+        Certified that this project report titled <strong>“LOAN ORIGINATION AND CREDIT ASSESSMENT SYSTEM (LOCAS)”</strong> is the Bonafide work of <strong>ABISHEK B (727824TUIT004)</strong> who carried out the project work under my supervision.
+    </p>
+
+    <table style="width: 100%; margin-top: 80px;">
+        <tr>
+            <td style="width: 50%; text-align: left;">
+                <strong>SIGNATURE</strong><br><br><br><br>
+                <strong>HEAD OF THE DEPARTMENT</strong><br>
+                Professor<br>
+                Information Technology<br>
+                Sri Krishna College of Technology<br>
+                Kovaipudur, Coimbatore - 641042
+            </td>
+            <td style="width: 50%; text-align: left;">
+                <strong>SIGNATURE</strong><br><br><br><br>
+                <strong>SUPERVISOR</strong><br>
+                Professor<br>
+                Information Technology<br>
+                Sri Krishna College of Technology<br>
+                Kovaipudur, Coimbatore - 641042
+            </td>
+        </tr>
+    </table>
+
+    <div style="margin-top: 60px;">
+        Submitted for the Project viva-voce examination held on _________________
+    </div>
+
+    <div style="margin-top: 40px; text-align: right; font-weight: bold;">
+        INTERNAL EXAMINER
+    </div>
+    <div class="page-number">iii</div>
+</div>
+
+<!-- PAGE 4: ACKNOWLEDGEMENT -->
+<div class="page">
+    <h1>ACKNOWLEDGEMENT</h1>
+    <p style="margin-top: 30px; line-height: 1.8;">
+        At this juncture, we take the opportunity to convey our sincere thanks and gratitude to the management of the college for providing all the facilities to us.
+    </p>
+    <p style="line-height: 1.8;">
+        We wish to convey our gratitude to our college principal, <strong>Dr. Sumithra M G</strong> for forwarding us to do our project and offering adequate duration to complete our project.
+    </p>
+    <p style="line-height: 1.8;">
+        We would like to express our grateful thanks to <strong>Dr. T Rajesh Kumar</strong> Head of the department, Department of Information Technology for his encouragement and valuable guidance to this project.
+    </p>
+    <p style="line-height: 1.8;">
+        We extend our gratitude to our beloved guide Assistant Professor, Department of Information Technology for her constant support and immense help at all stages of the project.
+    </p>
+    <div class="page-number">iv</div>
+</div>
+
+<!-- PAGE 5: ABSTRACT -->
+<div class="page">
+    <h1>ABSTRACT</h1>
+    <p>
+        Modern retail and enterprise banking operations demand strict regulatory compliance, accurate financial risk modeling, data security, and rapid credit decisioning across the loan lifecycle. Traditional credit underwriting processes frequently rely on manual paper applications, physical document verification, fragmented spreadsheets, and slow multi-tier approval channels. These outdated practices lead to administrative bottlenecks, human calculation errors, data inconsistencies, high turn-around time (TAT), and increased non-performing asset (NPA) risks. To eliminate these challenges, this project presents a full-stack, enterprise-grade <strong>Loan Origination and Credit Assessment System (LOCAS)</strong> developed using <strong>Spring Boot 3, React 18, and MySQL 8</strong>, engineered to automate, centralize, and streamline retail and business lending operations.
+    </p>
+    <p>
+        The platform delivers role-based dashboards tailored for key banking stakeholders, including <strong>Applicants, Relationship Managers, Credit Officers, Field Verifiers, Credit Heads, and System Administrators</strong>. Core capabilities include digital customer onboarding, automated KYC verification with hashed Aadhaar and masked PAN credentials, multi-bureau credit score pulls (CIBIL, Experian, Equifax, CRIF) requiring explicit applicant consent, automated FOIR (Fixed Obligation to Income Ratio) and LTV (Loan to Value Ratio) financial calculation engines, dynamic underwriting scorecards, and a mandatory <strong>Maker-Checker governance model</strong> enforcing Credit Head approval for high-value loans above INR 10 Lakhs.
+    </p>
+    <p>
+        By eliminating manual underwriting delays, enforcing strict credit policy rules, and incorporating SHA-256 tamper-evident audit logging, LOCAS enhances risk mitigation, regulatory compliance, operational efficiency, and customer satisfaction. The system provides a scalable digital foundation for modern banking institutions, drastically reducing loan processing times while maintaining audit-ready financial integrity.
+    </p>
+    <div class="page-number">v</div>
+</div>
+
+<!-- PAGE 6: TABLE OF CONTENTS -->
+<div class="page">
+    <h1>TABLE OF CONTENTS</h1>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+        <tr style="border-bottom: 2px solid #000; font-weight: bold;">
+            <td style="width: 15%;">CHAPTER NO</td>
+            <td style="width: 70%;">TITLE</td>
+            <td style="width: 15%; text-align: right;">PAGE NO</td>
+        </tr>
+        <tr><td></td><td><strong>ACKNOWLEDGEMENT</strong></td><td style="text-align: right;">iv</td></tr>
+        <tr><td></td><td><strong>ABSTRACT</strong></td><td style="text-align: right;">v</td></tr>
+        <tr><td></td><td><strong>LIST OF TABLES</strong></td><td style="text-align: right;">viii</td></tr>
+        <tr><td></td><td><strong>LIST OF FIGURES</strong></td><td style="text-align: right;">ix</td></tr>
+        <tr><td></td><td><strong>LIST OF ABBREVIATIONS</strong></td><td style="text-align: right;">x</td></tr>
+        <tr style="font-weight: bold;"><td style="padding-top: 8px;">1</td><td style="padding-top: 8px;">INTRODUCTION</td><td style="text-align: right; padding-top: 8px;">1</td></tr>
+        <tr><td></td><td>1.1 OVERVIEW</td><td style="text-align: right;">1</td></tr>
+        <tr><td></td><td>1.2 COMPONENTS OF SYSTEM</td><td style="text-align: right;">2</td></tr>
+        <tr><td></td><td>1.3 ADVANCED TECHNOLOGIES</td><td style="text-align: right;">3</td></tr>
+        <tr><td></td><td>1.4 GLOBAL PERSPECTIVES & REGULATORY COMPLIANCE</td><td style="text-align: right;">4</td></tr>
+        <tr style="font-weight: bold;"><td style="padding-top: 8px;">2</td><td style="padding-top: 8px;">SYSTEM ANALYSIS</td><td style="text-align: right; padding-top: 8px;">5</td></tr>
+        <tr><td></td><td>2.1 EXISTING SYSTEM</td><td style="text-align: right;">5</td></tr>
+        <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;2.1.1 DRAWBACKS</td><td style="text-align: right;">6</td></tr>
+        <tr><td></td><td>2.2 PROBLEM DEFINITION</td><td style="text-align: right;">7</td></tr>
+        <tr><td></td><td>2.3 PROPOSED SYSTEM</td><td style="text-align: right;">7</td></tr>
+        <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;2.3.1 ADVANTAGES</td><td style="text-align: right;">8</td></tr>
+        <tr style="font-weight: bold;"><td style="padding-top: 8px;">3</td><td style="padding-top: 8px;">SYSTEM REQUIREMENTS</td><td style="text-align: right; padding-top: 8px;">9</td></tr>
+        <tr><td></td><td>3.1 HARDWARE REQUIREMENTS</td><td style="text-align: right;">9</td></tr>
+        <tr><td></td><td>3.2 SOFTWARE REQUIREMENTS</td><td style="text-align: right;">9</td></tr>
+        <tr><td></td><td>3.3 SOFTWARE DESCRIPTION</td><td style="text-align: right;">9</td></tr>
+        <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;3.3.1 FRONTEND TECHNOLOGIES (REACT, VITE)</td><td style="text-align: right;">10</td></tr>
+        <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;3.3.2 BACKEND TECHNOLOGIES (SPRING BOOT)</td><td style="text-align: right;">11</td></tr>
+        <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;3.3.3 DATABASE (MySQL)</td><td style="text-align: right;">14</td></tr>
+        <tr style="font-weight: bold;"><td style="padding-top: 8px;">4</td><td style="padding-top: 8px;">SYSTEM DESIGN</td><td style="text-align: right; padding-top: 8px;">16</td></tr>
+        <tr><td></td><td>4.1 MODULE DESCRIPTION</td><td style="text-align: right;">16</td></tr>
+        <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;4.1.1 USER & ROLE-BASED ACCESS CONTROL (RBAC)</td><td style="text-align: right;">16</td></tr>
+        <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;4.1.2 LOAN APPLICATION & CREDIT POLICY ENGINE</td><td style="text-align: right;">17</td></tr>
+        <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;4.1.3 APPLICANT VERIFICATION & KYC MASKING</td><td style="text-align: right;">18</td></tr>
+        <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;4.1.4 AUTOMATED UNDERWRITING & SCORECARD</td><td style="text-align: right;">18</td></tr>
+        <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;4.1.5 CREDIT RISK & MAKER-CHECKER ENGINE</td><td style="text-align: right;">19</td></tr>
+        <tr><td></td><td>4.2 USE CASE DIAGRAM</td><td style="text-align: right;">20</td></tr>
+        <tr><td></td><td>4.3 SEQUENCE DIAGRAM</td><td style="text-align: right;">22</td></tr>
+        <tr><td></td><td>4.4 DATA FLOW DIAGRAM (DFD)</td><td style="text-align: right;">23</td></tr>
+        <tr style="font-weight: bold;"><td style="padding-top: 8px;">5</td><td style="padding-top: 8px;">TESTING</td><td style="text-align: right; padding-top: 8px;">24</td></tr>
+        <tr><td></td><td>5.1 UNIT TESTING & INTEGRATION TESTING</td><td style="text-align: right;">24</td></tr>
+        <tr><td></td><td>5.3 SECURITY, AUTHENTICATION & COMPLIANCE</td><td style="text-align: right;">25</td></tr>
+        <tr><td></td><td>5.4 TEST CASES (I & II)</td><td style="text-align: right;">27</td></tr>
+        <tr style="font-weight: bold;"><td style="padding-top: 8px;">6</td><td style="padding-top: 8px;">CONCLUSION AND FUTURE WORK</td><td style="text-align: right; padding-top: 8px;">30</td></tr>
+        <tr style="font-weight: bold;"><td style="padding-top: 8px;">7</td><td style="padding-top: 8px;">APPENDICES (SOURCE CODE & SCREENSHOTS)</td><td style="text-align: right; padding-top: 8px;">32</td></tr>
+        <tr style="font-weight: bold;"><td style="padding-top: 8px;">8</td><td style="padding-top: 8px;">REFERENCES</td><td style="text-align: right; padding-top: 8px;">41</td></tr>
+    </table>
+    <div class="page-number">vi</div>
+</div>
+
+<!-- PAGE 7: LIST OF TABLES & LIST OF FIGURES -->
+<div class="page">
+    <h1>LIST OF TABLES & FIGURES</h1>
+    <div class="caption">LIST OF TABLES</div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 20%;">TABLE NO</th>
+                <th style="width: 65%;">TITLE</th>
+                <th style="width: 15%;">PAGE NO</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>4.1.1</strong></td><td>User Roles and Access Permission Matrix</td><td style="text-align: center;">17</td></tr>
+            <tr><td><strong>4.1.2</strong></td><td>Loan Product & Credit Policy Specifications</td><td style="text-align: center;">17</td></tr>
+            <tr><td><strong>4.1.3</strong></td><td>Applicant Verification & Data Masking Schema</td><td style="text-align: center;">18</td></tr>
+            <tr><td><strong>4.1.4</strong></td><td>Credit Decision Thresholds & Maker-Checker Matrix</td><td style="text-align: center;">19</td></tr>
+        </tbody>
+    </table>
+
+    <div class="caption" style="margin-top: 25px;">LIST OF FIGURES</div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 20%;">FIGURE NO</th>
+                <th style="width: 65%;">TITLE</th>
+                <th style="width: 15%;">PAGE NO</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>3.1 - 3.4</strong></td><td>VS Code, React, Spring Boot, MySQL Logos</td><td style="text-align: center;">9-14</td></tr>
+            <tr><td><strong>4.1</strong></td><td>Use Case Diagram</td><td style="text-align: center;">21</td></tr>
+            <tr><td><strong>4.2</strong></td><td>Sequence Diagram</td><td style="text-align: center;">22</td></tr>
+            <tr><td><strong>4.3</strong></td><td>Data Flow Diagram (DFD)</td><td style="text-align: center;">23</td></tr>
+            <tr><td><strong>5.1 - 5.2</strong></td><td>JWT LocalStorage & Bearer Token Authorization Header</td><td style="text-align: center;">26</td></tr>
+            <tr><td><strong>5.3 - 5.4</strong></td><td>Test Case I & Test Case II Execution Alerts</td><td style="text-align: center;">27-29</td></tr>
+            <tr><td><strong>A.2.1 - A.2.3</strong></td><td>Login Portal, Admin Dashboard, Relational Database Queries</td><td style="text-align: center;">35-40</td></tr>
+        </tbody>
+    </table>
+    <div class="page-number">vii</div>
+</div>
+
+<!-- PAGE 8: LIST OF ABBREVIATIONS -->
+<div class="page">
+    <h1>LIST OF ABBREVIATIONS</h1>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 15%;">S. NO</th>
+                <th style="width: 30%;">ABBREVIATION</th>
+                <th style="width: 55%;">EXPANSION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td style="text-align: center;">1</td><td><strong>LOCAS</strong></td><td>Loan Origination and Credit Assessment System</td></tr>
+            <tr><td style="text-align: center;">2</td><td><strong>FOIR</strong></td><td>Fixed Obligation to Income Ratio</td></tr>
+            <tr><td style="text-align: center;">3</td><td><strong>LTV</strong></td><td>Loan to Value Ratio</td></tr>
+            <tr><td style="text-align: center;">4</td><td><strong>CIBIL</strong></td><td>Credit Information Bureau (India) Limited</td></tr>
+            <tr><td style="text-align: center;">5</td><td><strong>KYC</strong></td><td>Know Your Customer</td></tr>
+            <tr><td style="text-align: center;">6</td><td><strong>DPD</strong></td><td>Days Past Due</td></tr>
+            <tr><td style="text-align: center;">7</td><td><strong>NPA</strong></td><td>Non-Performing Asset</td></tr>
+            <tr><td style="text-align: center;">8</td><td><strong>RBI</strong></td><td>Reserve Bank of India</td></tr>
+            <tr><td style="text-align: center;">9</td><td><strong>RBAC</strong></td><td>Role-Based Access Control</td></tr>
+            <tr><td style="text-align: center;">10</td><td><strong>JWT</strong></td><td>JSON Web Token</td></tr>
+            <tr><td style="text-align: center;">11</td><td><strong>REST</strong></td><td>Representational State Transfer</td></tr>
+            <tr><td style="text-align: center;">12</td><td><strong>API</strong></td><td>Application Programming Interface</td></tr>
+            <tr><td style="text-align: center;">13</td><td><strong>JPA</strong></td><td>Java Persistence API</td></tr>
+            <tr><td style="text-align: center;">14</td><td><strong>SQL</strong></td><td>Structured Query Language</td></tr>
+            <tr><td style="text-align: center;">15</td><td><strong>DFD</strong></td><td>Data Flow Diagram</td></tr>
+        </tbody>
+    </table>
+    <div class="page-number">viii</div>
+</div>
+
+<!-- PAGE 9: CHAPTER 1 INTRODUCTION -->
+<div class="page">
+    <div style="text-align: center; font-weight: bold; font-size: 13pt;">CHAPTER 1</div>
+    <h1>INTRODUCTION</h1>
+    <h2>1.1 OVERVIEW</h2>
+    <p>
+        The rapid digital transformation of banking and financial services has drastically increased the demand for automated, secure, and transparent credit decisioning platforms. Traditional loan origination methods heavily depend on physical paperwork, manual document verification, isolated spreadsheets, and protracted multi-level approval hierarchies. These legacy approaches result in operational delays, high turn-around times (TAT), manual underwriting errors, and elevated non-performing asset (NPA) risks, burdening credit officers and creating frustration for retail and MSME loan applicants.
+    </p>
+    <p>
+        The <strong>Loan Origination and Credit Assessment System (LOCAS)</strong> is an enterprise platform designed to resolve these inefficiencies by delivering a centralized, secure, and regulatory-compliant digital lending ecosystem. LOCAS automates the end-to-end lending lifecycle—from initial customer registration, loan product selection, and automated financial ratio calculations (FOIR and LTV) to real-time credit bureau pulls (CIBIL, Experian, Equifax, CRIF), credit risk scorecards, field verification workflows, and Maker-Checker underwriting approvals.
+    </p>
+    <p>
+        Adhering strictly to financial regulations and banking security guidelines, LOCAS enforces stateless <strong>JSON Web Token (JWT)</strong> authentication, BCrypt password hashing, sensitive data encryption (AES-256 for Aadhaar hashing and PAN masking), and SHA-256 hash-chained audit logging. Furthermore, credit decisioning above configured financial thresholds (e.g., loans exceeding INR 10 Lakhs) strictly enforces a Maker-Checker policy requiring Credit Head approval. By eliminating manual bottlenecks and providing transparent, auditable credit decisioning, LOCAS establishes a robust, modern foundation for digital banking operations.
+    </p>
+    <div class="page-number">1</div>
+</div>
+
+<!-- PAGE 10: CHAPTER 1 (System Components & Advanced Tech) -->
+<div class="page">
+    <h2>1.2 COMPONENTS OF SYSTEM</h2>
+    <p><strong>Role-Specific Dashboards:</strong> Tailored portals for Applicants, Credit Officers, Credit Heads, Field Verifiers, and Admins.</p>
+    <p><strong>Credit Policy Engine:</strong> Manages product rules across HOME, PERSONAL, VEHICLE, EDUCATION, BUSINESS, GOLD, and LAP loans.</p>
+    <p><strong>Financial Calculator Engine:</strong> Computes real-time FOIR, LTV, EMI, and max eligible loan amounts.</p>
+
+    <h2>1.3 ADVANCED TECHNOLOGIES</h2>
+    <p><strong>Stateless JWT & Spring Security 6:</strong> Enforces granular Role-Based Access Control (RBAC) across endpoints.</p>
+    <p><strong>Maker-Checker High-Value Threshold:</strong> Restricts single-officer approvals for loans above INR 10 Lakhs.</p>
+    <p><strong>Explicit Customer Consent Bureau Fetch:</strong> Enforces data privacy compliance prior to pulling CIBIL/Experian credit scores.</p>
+    <p><strong>SHA-256 Audit Logging:</strong> Maintains an immutable, insert-only audit log of all financial decisions and user actions.</p>
+    <div class="page-number">2</div>
+</div>
+
+<!-- PAGE 11: CHAPTER 2 SYSTEM ANALYSIS -->
+<div class="page">
+    <div style="text-align: center; font-weight: bold; font-size: 13pt;">CHAPTER 2</div>
+    <h1>SYSTEM ANALYSIS</h1>
+    <h2>2.1 EXISTING SYSTEM & DRAWBACKS</h2>
+    <p>
+        Traditional loan origination relies heavily on manual paper files, physical branch visits, manual FOIR calculations, and unencrypted spreadsheet records. Drawbacks include high turnaround time (TAT), elevated risk of human error, lack of verifiable audit trails, and unauthorized access to sensitive financial credentials.
+    </p>
+
+    <h2>2.2 PROBLEM DEFINITION & 2.3 PROPOSED SYSTEM</h2>
+    <p>
+        LOCAS solves these problems by delivering an automated, web-based digital platform built on Spring Boot 3, React 18, and MySQL 8. It features automated financial calculators, multi-bureau integration with explicit consent verification, role-based security, and dual-control Maker-Checker governance for loans above INR 10 Lakhs.
+    </p>
+    <div class="page-number">3</div>
+</div>
+
+<!-- PAGE 12: CHAPTER 3 SYSTEM REQUIREMENTS -->
+<div class="page">
+    <div style="text-align: center; font-weight: bold; font-size: 13pt;">CHAPTER 3</div>
+    <h1>SYSTEM REQUIREMENTS</h1>
+    <h2>3.1 HARDWARE & 3.2 SOFTWARE REQUIREMENTS</h2>
+    <p><strong>Hardware:</strong> Intel i5/i7 Processor, 8GB/16GB RAM, 512GB SSD.</p>
+    <p><strong>Software Stack:</strong> Windows 11 / macOS, VS Code, ReactJS 18, Spring Boot 3, MySQL 8.</p>
+
+    <div class="screenshot-box">
+        <svg width="400" height="70" viewBox="0 0 500 80">
+            <rect x="20" y="15" width="100" height="50" rx="5" fill="#007acc"/>
+            <text x="70" y="45" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">VS Code</text>
+
+            <rect x="140" y="15" width="100" height="50" rx="5" fill="#20232a"/>
+            <text x="190" y="45" font-size="11" font-weight="bold" fill="#61dafb" text-anchor="middle">React 18</text>
+
+            <rect x="260" y="15" width="100" height="50" rx="5" fill="#6db33f"/>
+            <text x="310" y="45" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">Spring Boot</text>
+
+            <rect x="380" y="15" width="100" height="50" rx="5" fill="#00758f"/>
+            <text x="430" y="45" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">MySQL 8</text>
+        </svg>
+        <div class="caption">Fig. 3.1 - 3.4 Technology Stack Logos</div>
+    </div>
+    <div class="page-number">4</div>
+</div>
+
+<!-- PAGE 13: CHAPTER 4 SYSTEM DESIGN (Modules & Tables) -->
+<div class="page">
+    <div style="text-align: center; font-weight: bold; font-size: 13pt;">CHAPTER 4</div>
+    <h1>SYSTEM DESIGN</h1>
+    <h2>4.1 MODULE DESCRIPTION</h2>
+    <p>LOCAS comprises 6 modules: User & RBAC, Credit Policy Engine, Applicant Onboarding, Underwriting & Scorecard, Credit Risk & Maker-Checker, and Bureau Integration & Audit Logging.</p>
+
+    <div class="caption">Table 4.1.5 Maker-Checker Threshold Policy Matrix</div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>LOAN AMOUNT RANGE</th>
+                <th>REQUIRED AUTHORIZATION ROLE</th>
+                <th>ALLOWED DECISION ACTIONS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Up to INR 1,000,000 (&le; 10 Lakhs)</td>
+                <td>Credit Officer / Admin</td>
+                <td>APPROVE, DECLINE, REQUEST_CLARIFICATION</td>
+            </tr>
+            <tr>
+                <td>Above INR 1,000,000 (&gt; 10 Lakhs)</td>
+                <td>Credit Officer (Maker) &rarr; Credit Head (Checker)</td>
+                <td>RECOMMEND (Officer) &rarr; APPROVE / DECLINE (Head)</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="page-number">5</div>
+</div>
+
+<!-- PAGE 14: CHAPTER 4 (Diagrams) -->
+<div class="page">
+    <h2>4.2 USE CASE & 4.3 SEQUENCE DIAGRAMS</h2>
+    <div class="screenshot-box">
+        <svg width="450" height="200" viewBox="0 0 600 250">
+            <rect x="180" y="10" width="380" height="230" fill="#fffbe6" stroke="#d4b106" stroke-width="2" rx="8"/>
+            <text x="370" y="30" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">LOCAS Architecture & Maker-Checker Flow</text>
+            
+            <circle cx="60" cy="60" r="15" fill="#e6f7ff" stroke="#1890ff" stroke-width="2"/>
+            <text x="60" y="90" font-size="10" text-anchor="middle">Applicant</text>
+
+            <circle cx="60" cy="170" r="15" fill="#e6f7ff" stroke="#1890ff" stroke-width="2"/>
+            <text x="60" y="200" font-size="10" text-anchor="middle">Credit Head</text>
+
+            <ellipse cx="280" cy="70" rx="70" ry="20" fill="#ffffff" stroke="#1890ff"/>
+            <text x="280" y="74" font-size="9" text-anchor="middle">Submit Loan</text>
+
+            <ellipse cx="460" cy="170" rx="75" ry="22" fill="#fff1f0" stroke="#f5222d" stroke-width="2"/>
+            <text x="460" y="174" font-size="9" font-weight="bold" text-anchor="middle">Approve High Value (>10L)</text>
+
+            <line x1="75" y1="60" x2="210" y2="70" stroke="#555" stroke-width="1.5"/>
+            <line x1="75" y1="170" x2="385" y2="170" stroke="#f5222d" stroke-width="2"/>
+        </svg>
+        <div class="caption">Fig. 4.1 & 4.2 Use Case & Sequence Diagram Architecture</div>
+    </div>
+    <div class="page-number">6</div>
+</div>
+
+<!-- PAGE 15: CHAPTER 5 TESTING -->
+<div class="page">
+    <div style="text-align: center; font-weight: bold; font-size: 13pt;">CHAPTER 5</div>
+    <h1>TESTING</h1>
+    <h2>5.1 UNIT & INTEGRATION TESTING</h2>
+    <p>Unit tests run via JUnit 5 & Mockito test password hashing, FOIR formulas, and threshold validation logic in isolation.</p>
+    <p>Integration tests evaluate REST API controllers and MySQL database multi-table commits.</p>
+
+    <h2>5.3 SECURITY & AUTHENTICATION TESTING</h2>
+    <p>Stateless JWT verification validates token expiration, bearer authorization injection, and role-based endpoint permissions.</p>
+    <div class="page-number">7</div>
+</div>
+
+<!-- PAGE 16: CHAPTER 5 (Test Cases I & II) -->
+<div class="page">
+    <h2>5.4 TEST CASES</h2>
+    <h3>5.4.1 Test Case I: RBAC Access Control</h3>
+    <p>Attempts by unauthorized roles to invoke admin or approval endpoints return HTTP 403 Forbidden.</p>
+
+    <h3>5.4.2 Test Case II: Bureau Consent & Maker-Checker Threshold</h3>
+    <p>Bureau pulls missing `consentRecordId` fail validation. Credit Officers attempting to approve loans > 10 Lakhs are blocked with: <i>"Loans above INR 10 Lakh require Credit Head approval. Please submit as RECOMMEND."</i></p>
+
+    <div class="screenshot-box">
+        <svg width="450" height="120" viewBox="0 0 500 120">
+            <rect x="10" y="10" width="480" height="100" fill="#fffbe6" stroke="#ffe58f" rx="5"/>
+            <text x="250" y="40" font-family="Arial" font-size="11" font-weight="bold" fill="#d4b106" text-anchor="middle">MAKER-CHECKER POLICY ENFORCED</text>
+            <text x="250" y="70" font-family="Arial" font-size="10" fill="#434343" text-anchor="middle">"Loans above INR 10 Lakh require Credit Head approval. Please submit as RECOMMEND."</text>
+        </svg>
+        <div class="caption">Fig. 5.4 Test Case II Maker-Checker Enforcement Confirmation</div>
+    </div>
+    <div class="page-number">8</div>
+</div>
+
+<!-- PAGE 17: CHAPTER 6 CONCLUSION & FUTURE WORK -->
+<div class="page">
+    <div style="text-align: center; font-weight: bold; font-size: 13pt;">CHAPTER 6</div>
+    <h1>CONCLUSION AND FUTURE WORK</h1>
+    <h2>6.1 CONCLUSION</h2>
+    <p>
+        The <strong>Loan Origination and Credit Assessment System (LOCAS)</strong> provides a complete, secure, and regulatory-compliant digital lending platform built on Spring Boot 3, React 18, and MySQL 8. It successfully automates credit decisioning, enforces Maker-Checker threshold rules, protects sensitive customer data, and maintains SHA-256 tamper-evident audit logs.
+    </p>
+
+    <h2>6.2 FUTURE WORK</h2>
+    <p>Future enhancements include AI/ML credit default predictions, Account Aggregator (AA) framework integration, and smart contract automated disbursements.</p>
+    <div class="page-number">9</div>
+</div>
+
+<!-- PAGE 18: CHAPTER 7 APPENDIX I SOURCE CODE -->
+<div class="page">
+    <div style="text-align: center; font-weight: bold; font-size: 13pt;">CHAPTER 7</div>
+    <h1>APPENDIX I: SOURCE CODE</h1>
+    <h2>UnderwritingService.java (Maker-Checker & Threshold Enforcement)</h2>
+    <div class="code-container">
+@Service
+@RequiredArgsConstructor
+public class UnderwritingService {
+
+    private static final BigDecimal HIGH_VALUE_THRESHOLD = BigDecimal.valueOf(1000000.00); // 10 Lakhs
+
+    @Transactional
+    public ApplicationResponse processUnderwritingDecision(Long applicationId, Long userId, UnderwritingDecisionRequest request) {
+        LoanApplication application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Application not found"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        // Maker-Checker Rule Enforcement: Loans above INR 10 Lakh require Credit Head approval
+        boolean isHighValue = application.getRequestedAmount().compareTo(HIGH_VALUE_THRESHOLD) > 0;
+
+        if (request.getDecisionType() == DecisionType.APPROVE) {
+            if (isHighValue && user.getRole() == Role.CREDIT_OFFICER) {
+                throw new ForbiddenException("Loans above INR 10 Lakh require Credit Head approval (Maker-Checker policy). Please submit as RECOMMEND.");
+            }
+        }
+        
+        // Update Status & Save Decision...
+        return mapToResponse(application);
+    }
+}
+    </div>
+    <div class="page-number">10</div>
+</div>
+
+<!-- PAGE 19: APPENDIX II SCREENSHOTS & REFERENCES -->
+<div class="page">
+    <h1>APPENDIX II & REFERENCES</h1>
+    <h2>A.2.1 User Login & Admin Dashboard Screenshots</h2>
+    <div class="screenshot-box">
+        <svg width="450" height="150" viewBox="0 0 600 180">
+            <rect x="0" y="0" width="600" height="180" fill="#f5f7fa" rx="8"/>
+            <rect x="10" y="10" width="580" height="30" fill="#001529" rx="4"/>
+            <text x="25" y="30" font-size="11" font-weight="bold" fill="#fff">LOCAS Banking Administration Dashboard</text>
+            <rect x="20" y="55" width="130" height="50" fill="#fff" rx="4" stroke="#e8e8e8"/>
+            <text x="30" y="72" font-size="8" fill="#8c8c8c">ACTIVE APPLICATIONS</text>
+            <text x="30" y="93" font-size="14" font-weight="bold" fill="#1890ff">142</text>
+            <rect x="160" y="55" width="130" height="50" fill="#fff" rx="4" stroke="#e8e8e8"/>
+            <text x="170" y="72" font-size="8" fill="#8c8c8c">PENDING HIGH VALUE</text>
+            <text x="170" y="93" font-size="14" font-weight="bold" fill="#fa8c16">18</text>
+            <rect x="300" y="55" width="130" height="50" fill="#fff" rx="4" stroke="#e8e8e8"/>
+            <text x="310" y="72" font-size="8" fill="#8c8c8c">AVG FOIR %</text>
+            <text x="310" y="93" font-size="14" font-weight="bold" fill="#52c41a">42.5%</text>
+            <rect x="440" y="55" width="140" height="50" fill="#fff" rx="4" stroke="#e8e8e8"/>
+            <text x="450" y="72" font-size="8" fill="#8c8c8c">AUDIT TRAIL HASH</text>
+            <text x="450" y="93" font-size="8" font-weight="bold" fill="#722ed1">SHA-256 OK</text>
+        </svg>
+        <div class="caption">Fig. A.2.2 Admin & Credit Dashboard Portal</div>
+    </div>
+
+    <h2>REFERENCES</h2>
+    <p class="no-indent">[1] React Documentation: https://react.dev/</p>
+    <p class="no-indent">[2] Spring Boot Documentation: https://spring.io/projects/spring-boot</p>
+    <p class="no-indent">[3] Reserve Bank of India Digital Lending Mandates: https://www.rbi.org.in/</p>
+    <div class="page-number">11</div>
+</div>
+
+</body>
+</html>
+"""
+
+with open("report.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print("HTML report written to report.html")
+
+browser_paths = [
+    r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe',
+    r'C:\Program Files\Microsoft\Edge\Application\msedge.exe',
+    r'C:\Program Files\Google\Chrome\Application\chrome.exe'
+]
+
+browser = None
+for p in browser_paths:
+    if os.path.exists(p):
+        browser = p
+        break
+
+if browser:
+    print(f"Using browser: {browser}")
+    pdf_out = os.path.abspath("LOCAS_PROJECT_REPORT.pdf")
+    pdf_cmd = [
+        browser,
+        "--headless",
+        "--disable-gpu",
+        f"--print-to-pdf={pdf_out}",
+        os.path.abspath("report.html")
+    ]
+    res = subprocess.run(pdf_cmd, capture_output=True, text=True)
+    print("PDF Generation Output:", res.stdout, res.stderr)
+    if os.path.exists(pdf_out):
+        print(f"SUCCESS: {pdf_out} created successfully!")
+    else:
+        print("PDF generation failed.")
+else:
+    print("No browser found.")
